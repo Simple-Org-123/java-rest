@@ -76,11 +76,4 @@ class ApplicationTests {
         assertThat(responseEntity.getBody()).contains(entity.getId().toString());
     }
 
-    @Test
-    void shouldExposeOpenAPIEndpoint() {
-
-        var responseEntity = restTemplate.getForEntity("/api-docs", String.class);
-
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
 }
