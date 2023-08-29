@@ -33,7 +33,7 @@ import jakarta.validation.Valid;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "Customer Profile Management API",
+                title = "Customer Profile CHANGED",
                 version = "1.0"),
         tags = @Tag(
                 name = "Customer Profile REST API"))
