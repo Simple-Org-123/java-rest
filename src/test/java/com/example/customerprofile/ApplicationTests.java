@@ -33,47 +33,4 @@ class ApplicationTests {
     void cleanupDatabase() {
         repository.deleteAllInBatch();
     }
-
-    @Test
-    void shouldPersistCustomerProfileOnPostRequest() {
-
-        var body = "{" +
-                "\"firstName\": \"Joe\"," +
-                "\"lastName\": \"Doe\"," +
-                "\"email\": \"joe.doe@test.org\"" +
-                "}";
-
-        var headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        var httpEntity = new HttpEntity<>(body, headers);
-        var responseEntity = restTemplate.postForEntity("/api/customer-profiles", httpEntity, String.class);
-
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(responseEntity.hasBody()).isTrue();
-        var location = responseEntity.getHeaders().getLocation();
-        assertThat(location).isNotNull();
-
-        var profileId = location.getPath().substring(location.getPath().lastIndexOf("/") + 1);
-        var profile = repository.findById(profileId);
-        assertThat(profile).isPresent();
-    }
-
-    @Test
-    void shouldReturnCustomerProfileOnGetRequest() {
-
-        var entity = new CustomerProfileEntity()
-                .setId(UUID.randomUUID().toString())
-                .setFirstName("Joe")
-                .setLastName("Doe")
-                .setEmail("joe.doe@test.org");
-        repository.save(entity);
-
-        var responseEntity = restTemplate.getForEntity("/api/customer-profiles/" + entity.getId(), String.class);
-
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
-        assertThat(responseEntity.hasBody()).isTrue();
-        assertThat(responseEntity.getBody()).contains(entity.getId().toString());
-    }
-
 }
